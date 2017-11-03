@@ -6,6 +6,7 @@ from scipy.special import jn
 from scipy.misc import derivative
 from scipy.integrate import nquad
 from scipy.special import jn_zeros
+from emcee.utils import MPIPool
 
 data_mean = loadtxt('fulle_bins2D_cross_jk_final.dat')[:,5].reshape(25,-1).T
 rp_bins = loadtxt('fulle_bins2D_cross_jk_final.dat')[:,0].reshape(25,-1).T
