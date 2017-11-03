@@ -42,7 +42,7 @@ DC = lambda z: c*quad(H_inv, 0, z)[0]
 W_fcn = lambda z: (pz(z) / DC(z))**2 / c * H(z) # dchi/dz = c/H
 rho_cz = lambda z: 0.375*Hcgs(z)**2/pi/Gnewton
 
-
+zarr1=linspace(0,1,1001)
 Wnorm = quad(W_fcn, zmin, zmax) [0]
 W_arr = array([W_fcn(iz)/Wnorm for iz in zarr])
 W = interpolate.interp1d(zarr,W_arr,bounds_error=0,fill_value=0.)
@@ -102,7 +102,7 @@ def genxi(rpPi, z=0.3):
     irp, iPI = rpPi
     J2zeros = jn_zeros(2,100)/irp
     opts1={'points':J2zeros}
-    xi_test=nquad(xi_gp, [[1e-3, 10], [1e-3, 10]], args=(iz, irp,iPI),opts=[{}, opts1])
+    xi_test=nquad(xi_gp, [[1e-3, 10], [1e-3, 10]], args=(z, irp,iPI),opts=[{}, opts1])
     return xi_test[0]
 
 rp_arr = linspace(0.5, 60.5, 21)
