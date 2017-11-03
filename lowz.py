@@ -86,7 +86,7 @@ Ai=4.4
 const = Ai*bD*C1rhoc*om/2.0/pi**2
 
 def xi_gp(kz,kp,z,rp,PI): 
-    print kz,kp,z,rp,PI
+    #print kz,kp,z,rp,PI
     #kz,kp=10**logkz,10**logkp
     k=kabs(kz,kp)
     mu2=(kz/k)**2
