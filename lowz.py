@@ -7,9 +7,9 @@ from scipy.misc import derivative
 from scipy.integrate import nquad
 from scipy.special import jn_zeros
 
-data_mean = loadtxt('/Users/jia/weaklensing/lowz/fulle_bins2D_cross_jk_final.dat')[:,5].reshape(25,-1).T
-rp_bins = loadtxt('/Users/jia/weaklensing/lowz/fulle_bins2D_cross_jk_final.dat')[:,0].reshape(25,-1).T
-pi_bins = loadtxt('/Users/jia/weaklensing/lowz/fulle_bins2D_cross_jk_final.dat')[:,1].reshape(25,-1).T
+data_mean = loadtxt('fulle_bins2D_cross_jk_final.dat')[:,5].reshape(25,-1).T
+rp_bins = loadtxt('fulle_bins2D_cross_jk_final.dat')[:,0].reshape(25,-1).T
+pi_bins = loadtxt('fulle_bins2D_cross_jk_final.dat')[:,1].reshape(25,-1).T
 
 
 zmin,zmax = 0.16, 0.36
