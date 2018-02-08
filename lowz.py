@@ -61,7 +61,6 @@ Pk = Ptable[:,1:34].flatten()
 Pmatter_interp = interpolate.CloughTocher2DInterpolator(array([K*h, Z]).T, 2.0*pi**2*Pk/(K*h)**3)
 Pmatter = lambda k, z: Pmatter_interp (k, z)
 
-
 ## growth D(a)
 zarr1=linspace(0,1,1001)
 az = lambda z: 1.0/(1.0+z)
@@ -75,8 +74,10 @@ D_arr = array([D_fcn (az(iz)) for iz in zarr1])/D1
 dnda_arr = array([derivative(D_fcn, az(iz), dx=1e-5) for iz in zarr1])
 f_arr = az(zarr1)/D_arr * dnda_arr
 
+
 Dinterp = interpolate.interp1d(zarr1,D_arr,bounds_error=0,fill_value=0.)
 finterp = interpolate.interp1d(zarr1,f_arr,bounds_error=0,fill_value=0.)
+
 
 C1rhoc = 0.0134 #C1*rho_crit
 bD = 1.77 #LOWZ measurement
@@ -85,24 +86,31 @@ kabs = lambda kz, kp: sqrt(kz**2+kp**2)
 Ai=4.4
 const = Ai*bD*C1rhoc*om/2.0/pi**2
 
+############ use fixed z ###########
+iz=0.3
+ifinterp = finterp(iz)
+iWD = W(iz)/Dinterp(iz)
+###################################
+
 def xi_gp(kz,kp,z,rp,PI): 
     #print kz,kp,z,rp,PI
     #kz,kp=10**logkz,10**logkp
     k=kabs(kz,kp)
     mu2=(kz/k)**2
-    out=(1-mu2)*(kp/kz)*Pmatter(k,z)*jn(2,kp*rp)*(1.0+finterp(z)/bD*mu2)
+    out=(1-mu2)*kp*Pmatter(k,z)*jn(2,kp*rp)*(1.0+ifinterp/bD*mu2)
     out*=cos(kz*PI)
-    out*=W(z)/Dinterp(z)
+    #out*=W(z)/Dinterp(z)
+    out*=iWD
     return out*const
 
-irp=10
-iPI=10
+#irp=10
+#iPI=10
 
-def genxi(rpPi, z=0.3):
+def genxi(rpPi, z=iz):
     irp, iPI = rpPi
-    J2zeros = jn_zeros(2,100)/irp
-    opts1={'points':J2zeros}
-    xi_test=nquad(xi_gp, [[1e-3, 10], [1e-3, 10]], args=(z, irp,iPI),opts=[{}, opts1])
+#    J2zeros = jn_zeros(2,100)/irp
+#    opts1={'points':J2zeros}
+    xi_test=nquad(xi_gp, [[1e-3, 10], [1e-3, 10]], args=(z, irp, iPI))#,opts=[{}, opts1])
     return xi_test[0]
 
 rp_arr = linspace(0.5, 60.5, 21)
