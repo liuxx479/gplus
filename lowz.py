@@ -108,6 +108,7 @@ def xi_gp(kz,kp,z,rp,PI):
 
 def genxi(rpPi, z=iz):
     irp, iPI = rpPi
+    print irp, iPI
 #    J2zeros = jn_zeros(2,100)/irp
 #    opts1={'points':J2zeros}
     xi_test=nquad(xi_gp, [[1e-3, 10], [1e-3, 10]], args=(z, irp, iPI))#,opts=[{}, opts1])
