@@ -116,7 +116,7 @@ def genxi(rpPi, z=iz):
 #    J2zeros = jn_zeros(2,100)/irp
 #    opts1={'points':J2zeros}
     xi_test=nquad(xi_gp, [[1e-3, 10], [1e-3, 10]], args=(z, irp, iPI))#,opts=[{}, opts1])
-    savetxt(ifn, xi_test[0])
+    savetxt(ifn, [xi_test[0]])
     return xi_test[0]
 
 rp_arr = linspace(0.5, 60.5, 21)
