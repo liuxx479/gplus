@@ -108,10 +108,10 @@ def xi_gp(kz,kp,z,rp,PI):
 #iPI=10
 
 def genxi(rpPi, z=iz):
+    irp, iPI = rpPi
     ifn='xi_arr/rp%.2f_Pi%.2f.out'%(irp,iPI)
     if os.path.isfile(ifn):
-        return float(genfromtxt(ifn))
-    irp, iPI = rpPi
+        return float(genfromtxt(ifn)[0]
     print irp, iPI
 #    J2zeros = jn_zeros(2,100)/irp
 #    opts1={'points':J2zeros}
