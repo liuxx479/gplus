@@ -111,7 +111,7 @@ def genxi(rpPi, z=iz):
     irp, iPI = rpPi
     ifn='xi_arr/rp%.2f_Pi%.2f.out'%(irp,iPI)
     if os.path.isfile(ifn):
-        return float(genfromtxt(ifn)[0]
+        return float(genfromtxt(ifn))
     print irp, iPI
 #    J2zeros = jn_zeros(2,100)/irp
 #    opts1={'points':J2zeros}
