@@ -111,8 +111,9 @@ def genxi(rpPi, z=iz):
     irp, iPI = rpPi
     ifn='xi_arr/rp%.2f_Pi%.2f.out'%(irp,iPI)
     if os.path.isfile(ifn):
+        print 'skip', irp, iPI
         return float(genfromtxt(ifn))
-    print irp, iPI
+    print 'computing', irp, iPI
 #    J2zeros = jn_zeros(2,100)/irp
 #    opts1={'points':J2zeros}
     xi_test=nquad(xi_gp, [[1e-3, 10], [1e-3, 10]], args=(z, irp, iPI))#,opts=[{}, opts1])
@@ -128,7 +129,8 @@ if not pool.is_master():
     pool.wait()
     sys.exit(0)
 out = pool.map(genxi, rppi_arr)
-    
+#out = map(genxi, rppi_arr)
+
 save('out',out)
 print 'done done done'
 pool.close()
