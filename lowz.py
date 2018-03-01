@@ -181,6 +181,6 @@ if not pool.is_master():
 out = pool.map(genxi, z_Pk)
 #out = map(genxi, rppi_arr)
 
-#save('out',out)
+save('out',out)
 print 'done done done'
 #pool.close()
