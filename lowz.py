@@ -15,13 +15,11 @@ data_mean = loadtxt('fulle_bins2D_cross_jk_final.dat')[:,5].reshape(25,-1).T
 rp_bins = loadtxt('fulle_bins2D_cross_jk_final.dat')[:,0].reshape(25,-1).T
 pi_bins = loadtxt('fulle_bins2D_cross_jk_final.dat')[:,1].reshape(25,-1).T
 
-
-zmin,zmax = 0.16, 0.36
+zmin,zmax = 0.15, 0.37
 zcenter,dndz = load('dndz_lowz.npy')
 pz = interpolate.interp1d(zcenter,dndz,bounds_error=0,fill_value=0.)
 zarr=linspace(0.1,0.4,1000)
 #pz_test = pz(zarr)
-
 
 ## cosmology WMAP9
 h = 0.7
@@ -72,12 +70,12 @@ pars.set_matter_power(redshifts=z_Pk, kmax=10.0)
 results = camb.get_results(pars)
 pars.NonLinear = model.NonLinear_both
 results.calc_power_spectra(pars)
-kh_nonlin, z_nonlin, pk_nonlin = results.get_matter_power_spectrum(minkh=1e-3, maxkh=10.0, npoints = 401)
+kh_nonlin, z_nonlin, pk_nonlin = results.get_matter_power_spectrum(minkh=1e-4, maxkh=100.0, npoints = 401)
 
 iK, iZ = meshgrid(kh_nonlin,z_Pk)
 Z, K = iZ.flatten(), iK.flatten()
 Pk = array(pk_nonlin).flatten()
-Pmatter_interp = interpolate.CloughTocher2DInterpolator(array([log10(K), Z]).T, Pk)
+Pmatter_interp = interpolate.CloughTocher2DInterpolator(array([log10(K), Z]).T, Pk, fill_value=0.)
 Pmatter = lambda k, z: Pmatter_interp (log10(k), z)
 
 ## growth D(a)
@@ -131,7 +129,6 @@ ikc = 0.5*(ik[1:]+ik[:-1])
 kz, kp = array(meshgrid(ikc,ikc)).reshape(2,-1)
 dkz, dkp = array(meshgrid(dk,dk)).reshape(2,-1)
 
-
 #out = xi_int (10.,10.,z)
 
 #irp=10
@@ -154,7 +151,18 @@ rp_arr = linspace(0.5, 60.5, 21)
 Pi_arr = linspace(0.5, 60, 15)
 rppi_arr = [[irp, ipi] for irp in rp_arr for ipi in Pi_arr]
 
-for z in z_Pk:#zz[3:7]:
+#for z in z_Pk[:1]:#zz[3:7]:
+    #print z
+    #def xi_int (rpPI,z=z):
+        #print rpPI
+        #rp,PI=rpPI
+        #xi_arr = xi_gp(kz,kp,rp,PI,z)
+        #out = sum(xi_arr*dkz*dkp)
+        #return out
+    #out = map(xi_int, rppi_arr)
+    #save('xi_camb/xi_z%.3f.npy'%(z),array(out).reshape(21,15).T)
+
+def genxi(z):
     print z
     def xi_int (rpPI,z=z):
         print rpPI
@@ -163,13 +171,14 @@ for z in z_Pk:#zz[3:7]:
         out = sum(xi_arr*dkz*dkp)
         return out
     out = map(xi_int, rppi_arr)
-    save('xi_z%.3f.npy'%(z),array(out).reshape(21,15).T)
+    save('xi_camb/xi_z%.4f.npy'%(z),array(out).reshape(21,15).T)
+    return out
     
 #pool = MPIPool()
 #if not pool.is_master():
     #pool.wait()
     #sys.exit(0)
-#out = pool.map(genxi, rppi_arr)
+out = pool.map(genxi, z_Pk)
 #out = map(genxi, rppi_arr)
 
 #save('out',out)
