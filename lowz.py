@@ -174,13 +174,12 @@ def genxi(z):
     save('xi_camb/xi_z%.4f.npy'%(z),array(out).reshape(21,15).T)
     return out
     
-pool = MPIPool()
-if not pool.is_master():
-    pool.wait()
-    sys.exit(0)
-out = pool.map(genxi, z_Pk)
-#out = map(genxi, rppi_arr)
+#pool = MPIPool()
+#if not pool.is_master():
+    #pool.wait()
+    #sys.exit(0)
+#out = pool.map(genxi, z_Pk)
 
-save('out',out)
+#save('out',out)
 print 'done done done'
 #pool.close()
